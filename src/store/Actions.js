@@ -9,15 +9,15 @@ const Actions = (name)=>async(dispatch, state) => {
     console.log(countryData)
     console.log(countryData.name.common)
     console.log(Object.values(countryData.languages))
-    const country = {
-        name: countryData.name.common,
-        languages:Object.values(countryData.languages)
-    }
-    const updatedCountries = [...state().countries,country]
-    console.log(updatedCountries)
+    // const country = {
+    //     name: countryData.name.common,
+    //     languages:Object.values(countryData.languages)
+    // }
+    // const updatedCountries = [...state().countries,country]
+    // console.log(updatedCountries)
 
-    dispatch({type:"ADD_COUNTRY" , payload :country})
-    dispatch({type:"UPDATE_COUNTRIES", payload :updatedCountries})
+    // dispatch({type:"ADD_COUNTRY" , payload :country})
+    // dispatch({type:"UPDATE_COUNTRIES", payload :updatedCountries})
 }
 
 export default Actions
