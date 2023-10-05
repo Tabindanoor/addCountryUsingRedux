@@ -1,34 +1,47 @@
-import React,{useState} from 'react'
-import { Button, Input, InputGroup, InputGroupText } from 'reactstrap'
+import axios from 'axios'
+import React, { useState } from 'react'
+import Actions from '../store/Actions'
+import { useDispatch } from 'react-redux'
+
+import { useSelector } from 'react-redux/es/hooks/useSelector'
 
 const Main = () => {
+
+
+    const dispatch = useDispatch()
     const [country,setCountry] = useState("")
-    const handleChange=(e)=>{
-        setCountry(e.target.value);
+    const handleChange =(e)=>{
+        setCountry(e.target.value)
         console.log(e.target.value)
     }
+    const handleAddCountry=()=>{
+        if(country.trim()!=="") 
+        dispatch(Actions(country)) 
+        setCountry("")
+    }
 
-    const handleAdd=async(name)=>{
-        const response = await "https://restcountries.com/v3.1/all/";
-    // const mydate = await response.name.common;
-    console.log(response.data)
-    }       
-
+    const countires = useSelector((state)=>{console.log(state.countires)})
   return (
     <div>
-        <h1 className="text-center text-xl">Welcome to the main page</h1><br/>
-        
+        <h1>Add Country Name Using Redux</h1>
+        <br />
+        <label htmlFor="" >ADD COUNTRY</label>
+        <br />
+        <input type="text" name="country" id="" value={country} onChange={(e)=>handleChange(e)} />
+        <br />
+        <button onClick={handleAddCountry}>ADD + </button>
 
-  <InputGroup>
-    
-    <Input type='text' onChange={(e)=>{handleChange(e)}} name='countryname' />
-    <Button onClick={handleAdd} value={country} >
-     ADD COUNTRY
-    </Button>
-  </InputGroup>
+        {
+            countires.map((country)=>{
+                return (
+                    <div>       
+                        <li>{country.name}</li>
+                    </div>
+                )
+            })
+        }
 
 
-        
     </div>
   )
 }
