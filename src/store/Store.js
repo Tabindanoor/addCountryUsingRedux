@@ -1,26 +1,14 @@
-import { createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
+import { configureStore } from "@reduxjs/toolkit";
+import { addCountry } from "./Slice";
+// import { addCountry } from "./Slice";
+// import { updateLanguage } from "./Slice";
 
 
-export const MyReducer =(state={countries:[]}, action )=>{
-    switch (action.type) {
-        case "ADD_COUNTRY":
-            return( {
-                ...state, 
-                countries: [...state.countries, action.payload]
-            }) 
-        case "UPDATE_COUNTRIES":
-            return(
-                {
-                    ...state, 
-                    countries:[action.payload]
-                }
-            )  
-         
-        default:
-            return state;
+export const store = configureStore({
+    
+    reducer:{
+        //        [reducerName]: reducer,
+        country :addCountry,
+      
     }
-}
-
-
-export const store = createStore(MyReducer , applyMiddleware(thunk))
+})
