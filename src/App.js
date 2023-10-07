@@ -1,64 +1,82 @@
+
 import './App.css';
-import React,{ useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { addCountry } from './store/Slice';
-import { useSelector } from 'react-redux';
 
-
-const  App=()=> {
-  const [mycountry, setMyCountry] = useState("")
+const App = () => {
+  const [mycountry, setMyCountry] = useState("");
   const dispatch = useDispatch();
+  const country = useSelector((state) => state.country);
 
-  const handleInputChange=(e)=>{
-    setMyCountry(e.target.value)
-    console.log(e.target.value)
-  }
+  const handleInputChange = (e) => {
+    setMyCountry(e.target.value);
+  };
 
-  const country = useSelector((state)=>state.country)
-  console.log(country.payload, "country")
- 
-const handleAdd=()=>{
-  if(mycountry)
-  {
-    dispatch(addCountry({name: mycountry})) 
-    setMyCountry("")
-}
-}
+  const handleAdd = () => {
+    if (mycountry) {
+      dispatch(addCountry({ name: mycountry }));
+      setMyCountry("");
+    }
+  };
+
   return (
     <div className="App">
-        <h1>Hey there i am using Redux-Toolkit</h1>
-        <p>Add country using the Redux Store </p>
-        <input style={{backgroundColor:"black", width:"20%",textAlign:"center", justifyContent:"center", justifySelf:"center",padding:"15px", color:"white", fontSize:"20px", fontFamily:"monospace", fontWeight:"bolder", borderRadius:"10px", cursor:"pointer"}} type="text" name="country"  onChange={(e)=>{handleInputChange(e)}} id="" value={mycountry} />
-        <br /> <br />
-        <button onClick={handleAdd} style={{backgroundColor:"black", width:"15%",textAlign:"center",padding:"10px", color:"green", fontSize:"20px", fontFamily:"monospace", fontWeight:"bolder", borderRadius:"20px", cursor:"pointer"}}>ADD COUNTRY</button>
-        <table border={{}}>
-          <thead>
+      <h1>Hey there, I am using Redux-Toolkit</h1>
+      <p>Add a country using the Redux Store</p>
+      <input
+        type="text"
+        style={{backgroundColor:"black", width:"20%",textAlign:"center", justifyContent:"center", justifySelf:"center",padding:"15px", color:"white", fontSize:"20px", fontFamily:"monospace", fontWeight:"bolder", borderRadius:"10px", cursor:"pointer"}} 
+        name="country"
+        onChange={(e) => handleInputChange(e)}
+        value={mycountry}
+
+      />
+      <br /><br />
+      <button
+        onClick={handleAdd}
+        style={{
+          backgroundColor: "black",
+          width: "15%",
+          textAlign: "center",
+          padding: "10px",
+          color: "green",
+          fontSize: "20px",
+          fontFamily: "monospace",
+          fontWeight: "bolder",
+          borderRadius: "20px",
+          cursor: "pointer",
+        }}
+      >
+        ADD COUNTRY
+      </button>
+      <table border="1">
+        <thead>
           <tr>
             <th scope='col'>Name of Country</th>
-            <th scope='col'>Capital City Name</th>
-            <th scope='col'>Capital City Name</th>
           </tr>
-          </thead>
-          <tbody>
-          {/* {country.map((country, index) => (
+        </thead>
+        <tbody>
+          {country.map((countryData, index) => (
             <tr key={index}>
-              <td>{country.name}</td>
-              <td>{country.capitalCity}</td>
-              <td>{country.anotherProperty}</td>
+              <td>{countryData.name}</td>
             </tr>
-          ))} */}
-          <tr>
-              <td>name</td>
-              <td>capitalCity</td>
-              <td>anotherProperty</td>
-            </tr>
-          </tbody>
-         
-         
-        </table>
-
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-}
+};
 
 export default App;
+// function ot() {
+//   let value = 10;
+//   return function inn() {
+//   return value;
+//   };
+//   }
+  
+//   const cF = ot();
+//   const value = 20;
+  
+//   console.log(cF())

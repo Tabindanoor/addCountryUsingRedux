@@ -1,14 +1,21 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { addCountry } from "./Slice";
+// import { configureStore } from "@reduxjs/toolkit";
 // import { addCountry } from "./Slice";
-// import { updateLanguage } from "./Slice";
 
+
+// export const store = configureStore({
+    
+//     reducer:{
+//         //        [reducerName]: reducer,
+//         country :addCountry,
+      
+//     }
+// })
+// store/Store.js
+import { configureStore } from "@reduxjs/toolkit";
+import mycountrySlice from "./Slice";
 
 export const store = configureStore({
-    
-    reducer:{
-        //        [reducerName]: reducer,
-        country :addCountry,
-      
-    }
-})
+  reducer: {
+    country: mycountrySlice,
+  },
+});
