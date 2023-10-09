@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { addCountry } from '../store/Slice.js'
-import {Link} from "react-router-dom"
+import {Link, useParams} from "react-router-dom"
 
-const AddCountry = () => {
+const AddCountry = (data) => {
+  const {id} = useParams()
     const dispatch = useDispatch()
 const countryData = useSelector((state)=>state.country)
   const [countryDetail, setCountryDetail] = useState({
     country:"",
     official:"",
     language:"",
+
    
   })
 
@@ -31,7 +33,8 @@ const countryData = useSelector((state)=>state.country)
   const addCountryBtn = () =>{
     // if(countryDetail){
     //   if(countryDetail)
-      dispatch(addCountry(countryDetail))
+    // const newCountry = {id:Math.random(),name:countryDetail}
+      dispatch(addCountry(countryDetail));
       console.log(countryData, "data in the selector")
       setCountryDetail({
         country: "",
@@ -63,8 +66,6 @@ const countryData = useSelector((state)=>state.country)
         name="official" 
         placeholder='Enter Country Official name'
         value={countryDetail.official} 
-
-
 />
 
 <input
@@ -100,11 +101,7 @@ const countryData = useSelector((state)=>state.country)
  
   { 
   countryData.map((country, index) => (
-    <tbody key={index}>
-
-
-
-
+    <tbody key={country.id}>
       <tr style={{fontFamily:"serif",fontSize:"18px"}}>
         <td>{country.country}</td>
         <td>{country.official}</td>
