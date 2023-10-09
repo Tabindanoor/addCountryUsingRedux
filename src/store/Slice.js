@@ -6,6 +6,20 @@ const countrySlice = createSlice({
     reducers:{
         addCountry:(state,action)=>{
             state.push(action.payload);
+        },
+        updateLanguages:(state,action)=>{
+            const {countryId, language} = action.payload;
+            const country = state[countryId];
+            const existingLanguages = country.languages.find((lang)=>lang===language)
+            if(!existingLanguages) {
+                country.languages.push(language);
+            }
+         
+        //    find the language of the specific country
+        //  if the id of the country matches with the id in the state
+        //  and if the language is not found in the model 
+        // add the language to the model and display it on the screen
+        
         }
     }
 })
