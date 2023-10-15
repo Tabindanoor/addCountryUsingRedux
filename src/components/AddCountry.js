@@ -111,8 +111,7 @@ const countryData = useSelector((state)=>state.country)
     </tbody>
   ))
 }
-
-   
+ 
  
 </table>
 
