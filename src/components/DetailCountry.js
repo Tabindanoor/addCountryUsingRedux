@@ -1,13 +1,92 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {useSelector, useDispatch} from "react-redux"
+import { Link, useParams } from 'react-router-dom'
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Label, Input } from 'reactstrap';
 
-const DetailCountry = () => {
-    const myData = useSelector(state=>state.api)
+const DetailCountry = ({args}) => {
+  const {id} = useParams()
+    const myData = useSelector(state=>state.api[id])
     console.log(myData)
+
+
+    const [modal, setModal] = useState(false);
+
+    const toggle = () => setModal(!modal);
+
+//  const currency =  myData.forEach((obj, index) => {
+//       if (obj && obj.languages) {
+//         const languageCode = Object.keys(obj.languages)[0];
+//         const languageName = obj.languages[languageCode];
+//         console.log(`${languageName}`);
+//       }
+//     });
+
+for (const currencyKey in myData.currencies) {
+  if ( myData && myData.currencies.hasOwnProperty(currencyKey)) {
+    const currency = myData.currencies[currencyKey];
+    console.log(currencyKey);        // Output: USD, EUR, GBP, and so on
+    console.log(currency.name);      // Output: The name of the currency
+    console.log(currency.symbol);    // Output: The symbol of the currency
+  }
+}
+
   return (
     <div>
-      
+      {/* {JSON.stringify(myData)}   */}
 
+<div className='card'>
+    <p>country name </p>  <p>{myData.name.common}</p>
+    <p>country Official name</p> <p>{myData.name.common}</p>
+    <p>Currencies</p>
+    {Object.keys(myData.currencies).map(currencyKey => {
+          const currency = myData.currencies[currencyKey];
+          return (
+            <p key={currencyKey}>
+              {currencyKey}: {currency.name} ({currency.symbol})
+            </p>
+          )}
+    )}
+    <p>Region</p> <p>{myData.region} </p>
+    <p>SubRegion</p> <p>{myData.subregion} </p>
+    <p>Here Goes image</p>
+    <img src={myData.flags.png || myData.flags.svg} alt="img" />
+    <Link to={myData.maps.googleMaps || myData.maps.openStreetMaps}
+     target="_blank"
+     rel="noopener noreferrer"
+    >Here Goes the map</Link>
+    <p>Here is the language model </p>
+    <b > {myData.languages && myData.languages[Object.keys(myData.languages)[0]]}</b>
+   
+    <div>
+      <Button color="danger" onClick={toggle}>
+        ADD
+      </Button>
+      <Modal isOpen={modal} toggle={toggle} {...args}>
+        <ModalHeader toggle={toggle}>Modal Languages</ModalHeader>
+        <ModalBody className='flex justify-content-between'>
+
+    <b > {myData.languages && myData.languages[Object.keys(myData.languages)[0]]}</b>
+<br />
+          <Button color='warning'>Update</Button>
+          <br />
+          <Label for="exampleEmail">
+     ADD language
+    </Label>
+    <Input />
+
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={toggle}>
+          ADD
+          </Button>{' '}
+          <Button color="secondary" onClick={toggle}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </div>
+    
+</div>
     </div>
   )
 }

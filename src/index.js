@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { store } from './store/Store';
 import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import DetailCountry from './components/DetailCountry';
+import Map from './components/Map';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -16,6 +17,7 @@ root.render(
     <Routes>
       <Route path="/" element={<App />}/>
       <Route path="/:id" element={<DetailCountry />}/>
+      <Route path="/map" element={<Map />}/>
     </Routes>
 
   </React.StrictMode>
