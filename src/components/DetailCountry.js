@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import {useSelector, useDispatch} from "react-redux"
 import { Link, useParams } from 'react-router-dom'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Label, Input } from 'reactstrap';
-
+import { updateLanguages } from '../store/Slice';
 const DetailCountry = ({args}) => {
   const {id} = useParams()
     const myData = useSelector(state=>state.api[id])
-    console.log(myData)
+    // console.log(myData)
 
-
+    const [language, setlanguage] = useState("")
     const [modal, setModal] = useState(false);
 
     const toggle = () => setModal(!modal);
@@ -24,12 +24,19 @@ const DetailCountry = ({args}) => {
 for (const currencyKey in myData.currencies) {
   if ( myData && myData.currencies.hasOwnProperty(currencyKey)) {
     const currency = myData.currencies[currencyKey];
-    console.log(currencyKey);        // Output: USD, EUR, GBP, and so on
-    console.log(currency.name);      // Output: The name of the currency
-    console.log(currency.symbol);    // Output: The symbol of the currency
+    // console.log(currencyKey);        // Output: USD, EUR, GBP, and so on
+    // console.log(currency.name);      // Output: The name of the currency
+    // console.log(currency.symbol);    // Output: The symbol of the currency
   }
 }
 
+const handleChange=(e)=>{
+  setlanguage(e.target.value);
+  console.log(e.target.value);
+}
+const handleAddLanguage=()=>{
+  setlanguage(updateLanguages)
+}
   return (
     <div>
       {/* {JSON.stringify(myData)}   */}
@@ -49,7 +56,7 @@ for (const currencyKey in myData.currencies) {
     <p>Region</p> <p>{myData.region} </p>
     <p>SubRegion</p> <p>{myData.subregion} </p>
     <p>Here Goes image</p>
-    <img src={myData.flags.png || myData.flags.svg} alt="img" />
+    <img src={myData.flags.png || myData.flags.svg} height={"300px"} width={"500px"} alt="img" />
     <Link to={myData.maps.googleMaps || myData.maps.openStreetMaps}
      target="_blank"
      rel="noopener noreferrer"
@@ -72,11 +79,12 @@ for (const currencyKey in myData.currencies) {
           <Label for="exampleEmail">
      ADD language
     </Label>
-    <Input />
+    <Input onChange={(e)=>handleChange(e)}  />
+
 
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={toggle}>
+          <Button color="primary" onClick={handleAddLanguage}>
           ADD
           </Button>{' '}
           <Button color="secondary" onClick={toggle}>
