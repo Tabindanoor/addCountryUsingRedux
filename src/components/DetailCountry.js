@@ -2,9 +2,37 @@ import React, { useState } from 'react'
 import {useSelector, useDispatch} from "react-redux"
 import { Link, useParams } from 'react-router-dom'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Label, Input } from 'reactstrap';
-import { updateLanguages } from '../store/Slice';
-const DetailCountry = ({args}) => {
+import { updateLanguages, updateLanguage, addLanguage } from '../store/Slice';
+
+
+
+const DetailCountry = ({args, country}) => {
+  const dispatch = useDispatch();
   const {id} = useParams()
+  const languages = useSelector((state) => state.country[country]);
+  console.log(languages)
+  const [languageToAdd, setLanguageToAdd] = useState('');
+  const [languageToUpdate, setLanguageToUpdate] = useState('');
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const handleAddLanguage = () => {
+    dispatch(addLanguage({ country, language: languageToAdd }));
+    setLanguageToAdd('');
+  };
+
+  const handleUpdateLanguage = () => {
+    dispatch(updateLanguage({ country, oldLanguage: languageToUpdate, newLanguage: languageToAdd }));
+    setLanguageToAdd('');
+    setLanguageToUpdate('');
+    setIsUpdating(false);
+  };
+
+
+
+
+
+
+
     const myData = useSelector(state=>state.api[id])
     // console.log(myData)
 
@@ -34,15 +62,15 @@ const handleChange=(e)=>{
   setlanguage(e.target.value);
   console.log(e.target.value);
 }
-const handleAddLanguage=()=>{
-  setlanguage(updateLanguages)
-}
+// const handleAddLanguage=()=>{
+//   setlanguage(updateLanguages)
+// }
   return (
     <div>
       {/* {JSON.stringify(myData)}   */}
 
 <div className='card'>
-    <p>country name </p>  <p>{myData.name.common}</p>
+    {/* <p>country name </p>  <p>{myData.name.common}</p>
     <p>country Official name</p> <p>{myData.name.common}</p>
     <p>Currencies</p>
     {Object.keys(myData.currencies).map(currencyKey => {
@@ -61,10 +89,10 @@ const handleAddLanguage=()=>{
      target="_blank"
      rel="noopener noreferrer"
     >Here Goes the map</Link>
-    <p>Here is the language model </p>
+    <p>Here is the language model </p> */}
     <b > {myData.languages && myData.languages[Object.keys(myData.languages)[0]]}</b>
    
-    <div>
+    {/* <div>
       <Button color="danger" onClick={toggle}>
         ADD
       </Button>
@@ -92,8 +120,41 @@ const handleAddLanguage=()=>{
           </Button>
         </ModalFooter>
       </Modal>
-    </div>
+    </div> */}
     
+    <div>
+      <h1>Languages for {country}</h1>
+      <ul>
+        {languages &&
+          languages.map((language, index) => (
+            <li key={index}>
+              {language}{' '}
+              <button
+                onClick={() => {
+                  setLanguageToUpdate(language);
+                  setIsUpdating(true);
+                }}
+              >
+                Update
+              </button>
+            </li>
+          ))}
+      </ul>
+      <input
+        type="text"
+        value={isUpdating ? languageToUpdate : languageToAdd}
+        onChange={(e) => {
+          if (isUpdating) {
+            setLanguageToUpdate(e.target.value);
+          } else {
+            setLanguageToAdd(e.target.value);
+          }
+        }}
+      />
+      <button onClick={isUpdating ? handleUpdateLanguage : handleAddLanguage}>
+        {isUpdating ? 'Update' : 'Add'}
+      </button>
+    </div>
 </div>
     </div>
   )
