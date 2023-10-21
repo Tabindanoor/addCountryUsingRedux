@@ -2,53 +2,58 @@ import React, { useState } from 'react'
 import {useSelector, useDispatch} from "react-redux"
 import { Link, useParams } from 'react-router-dom'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Label, Input } from 'reactstrap';
-import { updateLanguages, updateLanguage, addLanguage } from '../store/Slice';
-
-
+import { updateLanguage, addLanguage } from '../store/Slice';
 
 const DetailCountry = ({args, country}) => {
   const dispatch = useDispatch();
   const {id} = useParams()
-  const languages = useSelector((state) => state.country[country]);
-  console.log(languages)
-  const [languageToAdd, setLanguageToAdd] = useState('');
-  const [languageToUpdate, setLanguageToUpdate] = useState('');
+  const languages = useSelector((state) => state.api[id].languages);
+  console.log(languages, "this ")
+
+//  const dispatch = useDispatch();
+  // const myData = useSelector((state) => state.languages.data);
+
+  // const [modal, setModal] = useState(false);
+  const [languageInput, setLanguageInput] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
+  const [selectedLanguageIndex, setSelectedLanguageIndex] = useState(null);
 
-  const handleAddLanguage = () => {
-    dispatch(addLanguage({ country, language: languageToAdd }));
-    setLanguageToAdd('');
-  };
-
-  const handleUpdateLanguage = () => {
-    dispatch(updateLanguage({ country, oldLanguage: languageToUpdate, newLanguage: languageToAdd }));
-    setLanguageToAdd('');
-    setLanguageToUpdate('');
+  const toggle = () => {
+    setModal(!modal);
+    setLanguageInput('');
     setIsUpdating(false);
+    setSelectedLanguageIndex(null);
   };
 
+  const handleAddLanguage = (country) => {
+    if (languageInput.trim() === '') {
+      // You can add validation or display an error message here.
+      return;
+    }
 
+    if (!isUpdating) {
+      // Adding a new language
+      dispatch(addLanguage({ country, language: languageInput }));
+    } else {
+      // Updating an existing language
+      dispatch(updateLanguage({ country, index: selectedLanguageIndex, language: languageInput }));
+    }
 
+    toggle(); // Close the modal
+  };
 
+  const handleEditLanguage = (country, index) => {
+    // Set the selected language and show the modal for editing
+    setSelectedLanguageIndex(index);
+    setLanguageInput(myData[country][index]);
+    setIsUpdating(true);
+    setModal(true);
+  };
 
-
-
-    const myData = useSelector(state=>state.api[id])
+    const myData = useSelector(state=>state.api[id] )
     // console.log(myData)
-
-    const [language, setlanguage] = useState("")
-    const [modal, setModal] = useState(false);
-
-    const toggle = () => setModal(!modal);
-
-//  const currency =  myData.forEach((obj, index) => {
-//       if (obj && obj.languages) {
-//         const languageCode = Object.keys(obj.languages)[0];
-//         const languageName = obj.languages[languageCode];
-//         console.log(`${languageName}`);
-//       }
-//     });
-
+    const [modal, setModal] = useState(false)
+    // const toggle = () => setModal(!modal);
 for (const currencyKey in myData.currencies) {
   if ( myData && myData.currencies.hasOwnProperty(currencyKey)) {
     const currency = myData.currencies[currencyKey];
@@ -59,16 +64,11 @@ for (const currencyKey in myData.currencies) {
 }
 
 const handleChange=(e)=>{
-  setlanguage(e.target.value);
-  console.log(e.target.value);
+ 
 }
-// const handleAddLanguage=()=>{
-//   setlanguage(updateLanguages)
-// }
+
   return (
     <div>
-      {/* {JSON.stringify(myData)}   */}
-
 <div className='card'>
     {/* <p>country name </p>  <p>{myData.name.common}</p>
     <p>country Official name</p> <p>{myData.name.common}</p>
@@ -89,9 +89,11 @@ const handleChange=(e)=>{
      target="_blank"
      rel="noopener noreferrer"
     >Here Goes the map</Link>
-    <p>Here is the language model </p> */}
-    <b > {myData.languages && myData.languages[Object.keys(myData.languages)[0]]}</b>
+    <p>Here is the language model </p>
+    <b > {myData.languages && myData.languages[Object.keys(myData.languages)[0]]}</b> */}
    
+   <b > {myData.languages && myData.languages[Object.keys(myData.languages)[0]]}</b>
+<br />
     {/* <div>
       <Button color="danger" onClick={toggle}>
         ADD
@@ -108,8 +110,6 @@ const handleChange=(e)=>{
      ADD language
     </Label>
     <Input onChange={(e)=>handleChange(e)}  />
-
-
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleAddLanguage}>
@@ -122,40 +122,36 @@ const handleChange=(e)=>{
       </Modal>
     </div> */}
     
-    <div>
-      <h1>Languages for {country}</h1>
-      <ul>
-        {languages &&
-          languages.map((language, index) => (
-            <li key={index}>
-              {language}{' '}
-              <button
-                onClick={() => {
-                  setLanguageToUpdate(language);
-                  setIsUpdating(true);
-                }}
-              >
-                Update
-              </button>
-            </li>
-          ))}
-      </ul>
-      <input
-        type="text"
-        value={isUpdating ? languageToUpdate : languageToAdd}
-        onChange={(e) => {
-          if (isUpdating) {
-            setLanguageToUpdate(e.target.value);
-          } else {
-            setLanguageToAdd(e.target.value);
-          }
-        }}
-      />
-      <button onClick={isUpdating ? handleUpdateLanguage : handleAddLanguage}>
-        {isUpdating ? 'Update' : 'Add'}
-      </button>
-    </div>
 </div>
+
+
+<div>
+      <Button color="danger" onClick={toggle}>
+        ADD
+      </Button>
+      <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>
+          {isUpdating ? 'Edit Language' : 'Add Language'}
+        </ModalHeader>
+        <ModalBody>
+          <Label for="languageInput">Language:</Label>
+          <Input
+            type="text"
+            id="languageInput"
+            value={languageInput}
+            onChange={(e) => setLanguageInput(e.target.value)}
+          />
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={() => handleAddLanguage(country)}>
+            {isUpdating ? 'Update' : 'Add'}
+          </Button>{' '}
+          <Button color="secondary" onClick={toggle}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </div>
     </div>
   )
 }

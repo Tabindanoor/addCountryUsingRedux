@@ -4,35 +4,26 @@ let nextCountryId = 1;
 
 const countrySlice = createSlice({
     name: "country",
-    initialState:[],
+    initialState:{
+      data: {}
+    },
 
     reducers:{
         addCountry:(state,action)=>{
             state.push(action.payload);
         },
-        updateLanguages:(state,action)=>{
-            const {countryId, language} = action.payload;
-            const country = state[countryId];
-            const existingLanguages = country.languages.find((lang)=>lang===language)
-            if(!existingLanguages) {
-                country.languages.push(language);
-            }
-        
+        addLanguage: (state, action) => {
+          const { country, language } = action.payload;
+          if (!state.data[country]) {
+            state.data[country] = [];
+          }
+          state.data[country].push(language);
         },
-         addLanguage: (state, action) => {
-            const { country, language } = action.payload;
-            if (!state[country]) {
-              state[country] = [];
-            }
-            state[country].push(language);
-          },
-          updateLanguage: (state, action) => {
-            const { country, oldLanguage, newLanguage } = action.payload;
-            const index = state[country].indexOf(oldLanguage);
-            if (index !== -1) {
-              state[country][index] = newLanguage;
-            }
-          },
+        updateLanguage: (state, action) => {
+          const { country, index, language } = action.payload;
+          state.data[country][index] = language;
+        },
+        
     }
 })
 
