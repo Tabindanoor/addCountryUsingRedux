@@ -12,16 +12,61 @@ const countrySlice = createSlice({
         addCountry:(state,action)=>{
             state.push(action.payload);
         },
+        // addLanguage: (state, action) => {
+        //   const { id, language } = action.payload;
+        //   // Find the country by ID
+        //   const country = state.api[id];
+    
+        //   if (country) {
+        //     if (!country.languages) {
+        //       country.languages = [];
+        //     }
+    
+        //     country.languages.push(language);
+        //   }
+        // },
+        // updateLanguage: (state, action) => {
+        //   const { id, language } = action.payload;
+        //   const country = state.api[id];
+    
+        //   if (country) {
+        //     const languageIndex = country.languages.findIndex((lang) => lang === language);
+        //     if (languageIndex !== -1) {
+        //       country.languages[languageIndex] = language;
+        //     }
+        //   }
+        // }
         addLanguage: (state, action) => {
-          const { country, language } = action.payload;
-          if (!state.data[country]) {
-            state.data[country] = [];
+          const { id, language } = action.payload;
+          
+          // Check if the country with the given ID exists in the state.api
+          if (state.api && state.api[id]) {
+            const country = state.api[id];
+            
+            // Check if the 'languages' property exists, and if not, create it as an array
+            if (!country.languages) {
+              country.languages = [];
+            }
+            
+            // Add the new language to the 'languages' array
+            country.languages.push(language);
           }
-          state.data[country].push(language);
         },
         updateLanguage: (state, action) => {
-          const { country, index, language } = action.payload;
-          state.data[country][index] = language;
+          const { id, language } = action.payload;
+          
+          // Check if the country with the given ID exists in the state.api
+          if (state.api[id]) {
+            const country = state.api[id];
+            
+            if (country.languages) {
+              const languageIndex = country.languages.findIndex((lang) => lang === language);
+              if (languageIndex !== -1) {
+                // Update the language in the 'languages' array
+                country.languages[languageIndex] = language;
+              }
+            }
+          }
         },
         
     }
